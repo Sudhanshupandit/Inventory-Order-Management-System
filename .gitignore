@@ -1,0 +1,28 @@
+# Python cache and environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+.env
+
+# Node dependencies and bundles
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# System/IDE files
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Docker volumes
+.docker-volumes/
