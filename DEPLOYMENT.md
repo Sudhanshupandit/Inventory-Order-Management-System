@@ -1,91 +1,96 @@
 # Deployment Guide
 
-Architecture: **Frontend → Vercel**, **Backend (Docker) + PostgreSQL → Render**.
+Architecture: **Frontend → Vercel**, **Backend (Docker) + PostgreSQL → Railway**.
 
-> Why not "all on Vercel"? Vercel hosts static/serverless frontends only — it
-> cannot run a persistent FastAPI server or a managed PostgreSQL database. This
-> split is also what the assessment requires.
+Repo: https://github.com/Sudhanshupandit/My_Project
 
----
-
-## 0. Push to GitHub (one-time)
-
-Both platforms deploy from a Git repo. From the `Order Management System` folder:
-
-```bash
-git init
-git add .
-git commit -m "Inventory & Order Management System"
-git branch -M main
-git remote add origin https://github.com/<you>/<repo>.git
-git push -u origin main
-```
-
-Treat the `Order Management System` folder as the **repo root** (it contains
-`backend/`, `frontend/`, `render.yaml`, `docker-compose.yml`).
+> The code is already on GitHub. These steps use the Railway and Vercel
+> dashboards (no CLI needed). Total time ≈ 10–15 minutes.
 
 ---
 
-## 1. Backend + Database on Render (Blueprint)
+## 1. Backend + Database on Railway
 
-1. Go to **dashboard.render.com → New + → Blueprint**.
-2. Connect your GitHub repo. Render auto-detects [`render.yaml`](render.yaml).
-   - If the repo root is the parent folder, set the Blueprint's root to
-     `Order Management System` when prompted.
-3. Click **Apply**. Render creates:
-   - `order-management-db` — free PostgreSQL.
-   - `order-management-api` — your Dockerized FastAPI backend, with
-     `DATABASE_URL` injected automatically from the DB.
-4. Wait for the backend to go **Live**, then copy its URL, e.g.
-   `https://order-management-api.onrender.com`.
-5. Verify: open `<backend-url>/docs` — the FastAPI Swagger UI should load.
+### 1a. Create the project and database
+1. Go to **railway.app → Login** (use *Login with GitHub*).
+2. **New Project → Deploy from GitHub repo →** select **`My_Project`**.
+   (Authorize Railway to access the repo if prompted.)
+3. Railway creates a service from the repo. Open that service →
+   **Settings → Source** and set **Root Directory** to `backend`.
+   This makes Railway build the backend using its `Dockerfile`
+   (pinned via `backend/railway.json`).
+4. Back in the project canvas, click **New → Database → Add PostgreSQL**.
+   Railway provisions a Postgres instance with a `DATABASE_URL`.
 
-> Free Render services sleep after inactivity; the first request after idling
-> takes ~30–50s to wake. Free Postgres expires after 30 days.
+### 1b. Wire the backend to the database
+1. Open the **backend service → Variables → New Variable**:
+   - **Name:** `DATABASE_URL`
+   - **Value:** click the variable picker and choose
+     `${{ Postgres.DATABASE_URL }}` (references the Postgres service).
+2. Add another variable (set the real value after Vercel is live in step 3):
+   - **Name:** `CORS_ORIGINS`  ·  **Value:** `*` (temporarily)
+3. The backend redeploys automatically. It listens on Railway's `$PORT`
+   (handled by the Dockerfile) and creates tables on startup.
+
+### 1c. Get a public URL
+1. Backend service → **Settings → Networking → Generate Domain**.
+2. Copy the URL, e.g. `https://my-project-production.up.railway.app`.
+3. Verify: open `<backend-url>/docs` — the FastAPI Swagger UI should load.
 
 ---
 
 ## 2. Frontend on Vercel
 
-1. Go to **vercel.com → Add New → Project** and import the same GitHub repo.
-2. Set **Root Directory** to `frontend` (or
-   `Order Management System/frontend` if you pushed the parent folder).
-   Framework preset: **Vite** (auto-detected via [`vercel.json`](frontend/vercel.json)).
+1. Go to **vercel.com → Add New → Project** and import **`My_Project`**.
+2. Set **Root Directory** to `frontend`.
+   Framework preset **Vite** is auto-detected (via `frontend/vercel.json`).
 3. Add an **Environment Variable**:
-   - `VITE_API_URL` = your Render backend URL (no trailing slash), e.g.
-     `https://order-management-api.onrender.com`
-4. Click **Deploy**. Copy the resulting URL, e.g. `https://your-app.vercel.app`.
+   - **Name:** `VITE_API_URL`
+   - **Value:** your Railway backend URL (no trailing slash), e.g.
+     `https://my-project-production.up.railway.app`
+4. Click **Deploy**. Copy the URL, e.g. `https://my-project.vercel.app`.
 
 ---
 
 ## 3. Lock CORS to your frontend
 
-1. In Render → `order-management-api` → **Environment**, set:
-   - `CORS_ORIGINS` = `https://your-app.vercel.app`
-2. **Save** → the service redeploys. The API now only accepts your frontend.
+1. In Railway → backend service → **Variables**, change:
+   - `CORS_ORIGINS` = `https://my-project.vercel.app`
+2. Save → the backend redeploys. The API now only accepts your frontend.
 
 ---
 
 ## 4. Verify end-to-end
 
 - Open the Vercel URL → the dashboard loads.
-- Create a product / customer / order → data persists (proves frontend → backend → DB).
-- Refresh → the 3-second splash shows, then data reloads from the backend.
+- Create a product / customer / order → data persists
+  (proves frontend → backend → database).
+- Refresh → the splash shows, then data reloads from the backend.
 
 ---
 
-## Submission checklist (per the assessment)
+## Submission checklist
 
-- [ ] GitHub repo link (frontend + backend)
-- [ ] Docker Hub image link for the backend
-      (`docker build -t <user>/oms-backend ./backend && docker push <user>/oms-backend`)
+- [x] GitHub repo: https://github.com/Sudhanshupandit/My_Project
 - [ ] Live frontend URL (Vercel)
-- [ ] Live backend API URL (Render, e.g. `<backend-url>/docs`)
+- [ ] Live backend API URL (Railway `<url>/docs`)
+- [ ] (Optional) Docker Hub backend image:
+      `docker build -t <user>/oms-backend ./backend && docker push <user>/oms-backend`
 
 ## Environment variables reference
 
-| Service  | Variable        | Value                                   |
-|----------|-----------------|-----------------------------------------|
-| Backend  | `DATABASE_URL`  | auto-injected by Render from the DB     |
-| Backend  | `CORS_ORIGINS`  | `https://your-app.vercel.app`           |
-| Frontend | `VITE_API_URL`  | `https://order-management-api.onrender.com` |
+| Service  | Variable        | Value                                            |
+|----------|-----------------|--------------------------------------------------|
+| Backend  | `DATABASE_URL`  | `${{ Postgres.DATABASE_URL }}` (Railway ref)     |
+| Backend  | `CORS_ORIGINS`  | `https://my-project.vercel.app`                  |
+| Frontend | `VITE_API_URL`  | `https://my-project-production.up.railway.app`   |
+
+## Notes / troubleshooting
+
+- **Build uses Docker:** Root Directory `backend` + `backend/railway.json`
+  force the Dockerfile builder. If Railway tries Nixpacks, re-check the
+  Root Directory is exactly `backend`.
+- **Port:** the Dockerfile runs `uvicorn ... --port ${PORT:-8000}`, so it
+  binds to Railway's injected `$PORT` automatically.
+- **DB scheme:** the backend rewrites `postgres://` → `postgresql://`
+  automatically, so any Railway connection string works.

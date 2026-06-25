@@ -63,8 +63,7 @@ Order Management System/
 │   ├── vercel.json
 │   └── .env.example
 ├── docker-compose.yml      # Orchestrates db + backend + frontend
-├── render.yaml             # Render deployment blueprint
-└── DEPLOYMENT.md           # Step-by-step deployment guide
+└── DEPLOYMENT.md           # Step-by-step deployment guide (Vercel + Railway)
 ```
 
 ---
@@ -150,7 +149,7 @@ See `.env.example` in each folder for templates.
 
 ## ☁️ Deployment
 
-The app deploys as **Frontend → Vercel** and **Backend + PostgreSQL → Render**.
+The app deploys as **Frontend → Vercel** and **Backend + PostgreSQL → Railway**.
 Full click-by-click instructions are in **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 ---
