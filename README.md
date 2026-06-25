@@ -2,6 +2,15 @@
 
 A production-ready, fully containerized **Inventory & Order Management System** that lets businesses manage products, customers, and orders with live inventory tracking. Built with a **React** frontend, a **FastAPI (Python)** backend, and a **PostgreSQL** database — all orchestrated with **Docker Compose**.
 
+## 🌐 Live Demo
+
+| | URL |
+|---|-----|
+| 🖥️ **Live App (Frontend)** | **https://my-project-nine-omega-82.vercel.app/** |
+| ⚙️ **Backend API (Swagger docs)** | https://myproject-production-892c.up.railway.app/docs |
+
+> Frontend hosted on **Vercel** · Backend + PostgreSQL hosted on **Railway**.
+
 ---
 
 ## ✨ Features
