@@ -74,8 +74,7 @@ Repo: https://github.com/Sudhanshupandit/Inventory-Order-Management-System
 - [x] GitHub repo: https://github.com/Sudhanshupandit/Inventory-Order-Management-System
 - [ ] Live frontend URL (Vercel)
 - [ ] Live backend API URL (Railway `<url>/docs`)
-- [ ] (Optional) Docker Hub backend image:
-      `docker build -t <user>/oms-backend ./backend && docker push <user>/oms-backend`
+- [x] Docker Hub backend image: https://hub.docker.com/r/sudhanshupandit905/inventory-order-backend
 
 ## Environment variables reference
 

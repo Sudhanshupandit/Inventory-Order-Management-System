@@ -8,8 +8,9 @@ A production-ready, fully containerized **Inventory & Order Management System** 
 |---|-----|
 | 🖥️ **Live App (Frontend)** | **https://my-project-nine-omega-82.vercel.app/** |
 | ⚙️ **Backend API (Swagger docs)** | https://myproject-production-892c.up.railway.app/docs |
+| 🐳 **Backend Docker Image** | https://hub.docker.com/r/sudhanshupandit905/inventory-order-backend |
 
-> Frontend hosted on **Vercel** · Backend + PostgreSQL hosted on **Railway**.
+> Frontend hosted on **Vercel** · Backend + PostgreSQL hosted on **Railway** · Backend image on **Docker Hub**.
 
 ---
 
