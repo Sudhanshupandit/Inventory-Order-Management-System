@@ -2,7 +2,7 @@
 
 Architecture: **Frontend → Vercel**, **Backend (Docker) + PostgreSQL → Railway**.
 
-Repo: https://github.com/Sudhanshupandit/My_Project
+Repo: https://github.com/Sudhanshupandit/Inventory-Order-Management-System
 
 > The code is already on GitHub. These steps use the Railway and Vercel
 > dashboards (no CLI needed). Total time ≈ 10–15 minutes.
@@ -13,7 +13,7 @@ Repo: https://github.com/Sudhanshupandit/My_Project
 
 ### 1a. Create the project and database
 1. Go to **railway.app → Login** (use *Login with GitHub*).
-2. **New Project → Deploy from GitHub repo →** select **`My_Project`**.
+2. **New Project → Deploy from GitHub repo →** select **`Inventory-Order-Management-System`**.
    (Authorize Railway to access the repo if prompted.)
 3. Railway creates a service from the repo. Open that service →
    **Settings → Source** and set **Root Directory** to `backend`.
@@ -41,7 +41,7 @@ Repo: https://github.com/Sudhanshupandit/My_Project
 
 ## 2. Frontend on Vercel
 
-1. Go to **vercel.com → Add New → Project** and import **`My_Project`**.
+1. Go to **vercel.com → Add New → Project** and import **`Inventory-Order-Management-System`**.
 2. Set **Root Directory** to `frontend`.
    Framework preset **Vite** is auto-detected (via `frontend/vercel.json`).
 3. Add an **Environment Variable**:
@@ -71,7 +71,7 @@ Repo: https://github.com/Sudhanshupandit/My_Project
 
 ## Submission checklist
 
-- [x] GitHub repo: https://github.com/Sudhanshupandit/My_Project
+- [x] GitHub repo: https://github.com/Sudhanshupandit/Inventory-Order-Management-System
 - [ ] Live frontend URL (Vercel)
 - [ ] Live backend API URL (Railway `<url>/docs`)
 - [ ] (Optional) Docker Hub backend image:
